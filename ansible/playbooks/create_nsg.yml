@@ -1,0 +1,16 @@
+---
+- name: Create Network Security Group using Azure CLI
+  hosts: localhost
+  tasks:
+    - name: Create Network Security Group
+      command: >
+        az network nsg create
+        --resource-group rg-olimpiadas
+        --name nsg-olimpiadas
+        --location eastus
+        --tags Ambiente=Olimpiadas
+      register: nsg
+
+    - name: Display NSG info
+      debug:
+        var: nsg.stdout_lines
