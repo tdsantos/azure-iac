@@ -1,83 +1,56 @@
 
-# Setup Inicial para o Projeto "Olimpiadas TFTEC"
+# Setup Inicial
 
-## Estrutura de Diretórios
+Este documento descreve os passos necessários para configurar o ambiente Azure para o projeto `olimpiadas tftec`.
 
-```
-azure-terraform/
-├── modules/
-│   ├── network/
-│   ├── compute/
-│   └── storage/
-├── ansible/
-│   ├── inventory/
-│   ├── playbooks/
-│   ├── roles/
-│   │   ├── common/
-│   │   ├── webserver/
-│   │   └── database/
-├── env/
-│   ├── dev/
-│   ├── staging/
-│   └── prod/
-├── scripts/
-│   └── setup_azure_credentials.sh
-├── main.tf
-├── outputs.tf
-├── providers.tf
-└── variables.tf
-```
+## Requisitos
 
-## Documentação
+- Azure CLI
+- Ansible
+- jq
 
-### 1. Instalação de Dependências
+## Instalação
 
-#### Instalar o Azure CLI
-
-O Azure CLI é necessário para gerenciar os recursos Azure via linha de comando.
+### 1. Instalar o Azure CLI
 
 ```bash
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 ```
 
-#### Instalar o Ansible
-
-O Ansible é necessário para automatizar a configuração dos recursos após o provisionamento.
+### 2. Instalar o Ansible
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y ansible
+pip install --upgrade ansible
 ```
 
-#### Instalar o jq
-
-O `jq` é utilizado para processar JSON no script.
+### 3. Instalar o jq
 
 ```bash
-sudo apt-get install -y jq
+sudo apt-get install jq
 ```
 
-### 2. Fazer Login no Azure CLI
+## Configuração do Ambiente
 
-Antes de executar qualquer script, você precisa fazer login no Azure CLI para autenticar sua conta.
+### 1. Autenticação no Azure
+
+Faça login na sua conta Azure:
 
 ```bash
 az login
 ```
 
-### 3. Criar o Script para Configurar Credenciais do Azure
+Defina a assinatura que será utilizada:
 
-Crie o script `setup_azure_credentials.sh` na pasta `scripts` com o seguinte conteúdo:
+```bash
+az account set --subscription "Azure subscription 1"
+```
+
+### 2. Configurar as Credenciais do Azure para o Ansible
+
+Crie um principal de serviço para o Ansible:
 
 ```bash
 #!/bin/bash
-
-# Certifique-se de que jq está instalado
-if ! [ -x "$(command -v jq)" ]; then
-  echo 'Erro: jq não está instalado.' >&2
-  echo 'Instale jq com: sudo apt-get install -y jq' >&2
-  exit 1
-fi
 
 # Obter ID da Assinatura
 subscription_id=$(az account show --query id --output tsv)
@@ -105,34 +78,126 @@ EOL
 echo "Credenciais salvas em ~/.azure/credentials"
 ```
 
-### 4. Dar Permissão de Execução ao Script
+### 3. Criar Resource Group
 
-Dê permissão de execução ao script `setup_azure_credentials.sh`:
+Crie um playbook Ansible para criar o Resource Group:
 
-```bash
-chmod +x scripts/setup_azure_credentials.sh
+```yaml
+---
+- name: Create Azure Resource Group using Azure CLI
+  hosts: localhost
+  tasks:
+    - name: Create resource group
+      command: >
+        az group create
+        --name rg-olimpiadas
+        --location eastus
+        --tags Ambiente=Olimpiadas
+      register: rg
+
+    - name: Display resource group info
+      debug:
+        var: rg.stdout_lines
 ```
 
-### 5. Executar o Script para Configurar Credenciais
-
-Execute o script para configurar as credenciais do Azure:
+Execute o playbook:
 
 ```bash
-./scripts/setup_azure_credentials.sh
+ansible-playbook create_resource_group_cli.yml -vvv
 ```
 
-### 6. Verificar a Configuração das Credenciais
+### 4. Criar Virtual Network (VNet) e Subnets
 
-Você pode verificar se as credenciais foram salvas corretamente:
+Crie um playbook Ansible para criar a VNet e as subnets:
+
+```yaml
+---
+- name: Create Azure Virtual Network and Subnets using Azure CLI
+  hosts: localhost
+  tasks:
+    - name: Create virtual network
+      command: >
+        az network vnet create
+        --name vnet-olimpiadas
+        --resource-group rg-olimpiadas
+        --address-prefix 10.0.0.0/16
+        --tags Ambiente=Olimpiadas
+      register: vnet
+
+    - name: Create subnet 01
+      command: >
+        az network vnet subnet create
+        --resource-group rg-olimpiadas
+        --vnet-name vnet-olimpiadas
+        --name sub-olimpiadas01
+        --address-prefix 10.0.1.0/24
+      register: subnet01
+
+    - name: Create subnet 02
+      command: >
+        az network vnet subnet create
+        --resource-group rg-olimpiadas
+        --vnet-name vnet-olimpiadas
+        --name sub-olimpiadas02
+        --address-prefix 10.0.2.0/24
+      register: subnet02
+
+    - name: Create Network Security Group
+      command: >
+        az network nsg create
+        --resource-group rg-olimpiadas
+        --name nsg-olimpiadas
+        --location eastus
+        --tags Ambiente=Olimpiadas
+      register: nsg
+
+    - name: Display virtual network info
+      debug:
+        var: vnet.stdout_lines
+
+    - name: Display subnet 01 info
+      debug:
+        var: subnet01.stdout_lines
+
+    - name: Display subnet 02 info
+      debug:
+        var: subnet02.stdout_lines
+
+    - name: Display NSG info
+      debug:
+        var: nsg.stdout_lines
+```
+
+Execute o playbook:
 
 ```bash
-cat ~/.azure/credentials
+ansible-playbook create_vnet_subnets.yml -vvv
 ```
 
-## Próximos Passos
+## Estrutura de Diretórios
 
-Com essas etapas, você configurou o ambiente para usar Ansible e Azure CLI. Aqui estão os próximos passos que você pode seguir:
+```plaintext
+azure-terraform/
+├── ansible/
+│   ├── inventory/
+│   │   └── hosts.ini
+│   ├── playbooks/
+│   │   ├── create_resource_group_cli.yml
+│   │   ├── create_vnet_subnets.yml
+│   ├── roles/
+│   │   ├── common/
+│   │   ├── webserver/
+│   │   └── database/
+├── scripts/
+│   └── setup_azure_credentials.sh
+├── main.tf
+├── outputs.tf
+├── providers.tf
+└── variables.tf
+```
 
-1. **Criar Playbooks do Ansible**: Crie playbooks para gerenciar seus recursos Azure.
-2. **Criar Configurações do Terraform**: Configure o Terraform para provisionar recursos na Azure.
-3. **Automatizar Tarefas com Ansible**: Use Ansible para automatizar a configuração e gerenciamento dos recursos provisionados pelo Terraform.
+## Autor
+
+Thiago dos Santos  
+Email: tdsantos.cloud@gmail.com  
+LinkedIn: [https://www.linkedin.com/in/tdsantos1981/](https://www.linkedin.com/in/tdsantos1981/)
