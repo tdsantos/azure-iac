@@ -12,6 +12,19 @@ module "network" {
   tags                = var.tags
 }
 
+module "vm" {
+  source              = "./modules/vm"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  subnet_id           = module.network.subnet01_id
+  vm_windows_username = var.vm_windows_username
+  vm_windows_password = var.vm_windows_password
+  vm_linux_username   = var.vm_linux_username
+  vm_linux_password   = var.vm_linux_password
+  # vm_windows_size     = "Standard_DC2s_v3" # Atualizado para o tipo atual
+  tags                = var.tags
+}
+
 output "vnet_name" {
   value = module.network.vnet_name
 }
@@ -26,4 +39,12 @@ output "subnet02_id" {
 
 output "nsg_id" {
   value = module.network.nsg_id
+}
+
+output "vm_linux_id" {
+  value = module.vm.vm_linux_id
+}
+
+output "vm_windows_id" {
+  value = module.vm.vm_windows_id
 }
