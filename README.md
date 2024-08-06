@@ -98,7 +98,8 @@ terraform apply
 
 ## Provisioned Resources
 
-![Azure Resources](https://docs.microsoft.com/en-us/azure/architecture/icons/PNG/Resources.png)
+![Azure Resources](https://github.com/user-attachments/assets/b05fb2a4-c10d-43b4-9651-db66c151e6a3)
+
 
 - **Resource Group:** `rg-olimpiadas`
 - **Virtual Network:** `vnet-olimpiadas`
