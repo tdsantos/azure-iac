@@ -9,6 +9,8 @@ Repositório para armazenar o projeto das Olimpíadas TFTEC 2024
 ![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoft-azure)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
+![Terraform Logo](https://www.terraform.io/assets/images/og-image-8b3e4f7d.png)
+
 ## Overview
 
 Este projeto utiliza o Terraform para gerenciar e provisionar a infraestrutura no Azure. Ele inclui a configuração de recursos como grupos de recursos, redes virtuais, sub-redes, interfaces de rede e máquinas virtuais.
