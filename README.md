@@ -1,11 +1,11 @@
-```markdown
 # Terraform Azure Infrastructure Project
 
 ![Terraform](https://img.shields.io/badge/Terraform-v1.0+-623CE4?style=for-the-badge&logo=terraform)
 ![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoft-azure)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-![Terraform Logo](https://www.terraform.io/assets/images/og-image-8b3e4f7d.png)
+![Terraform Logo](https://github.com/user-attachments/assets/1f67b946-5d72-4ecd-bc8a-2dff865434bf)
+
 
 ## Overview
 
@@ -83,10 +83,10 @@ tags = {
   Project     = "Olimpiadas"
 }
 vm_windows_name     = "vm-windows"
-vm_windows_username = "johnsnow"
+vm_windows_username = "your_user"
 vm_windows_password = "your_password"
 vm_linux_name       = "vm-linux"
-vm_linux_username   = "johnsnow"
+vm_linux_username   = "your_user"
 vm_linux_ssh_key    = "your_ssh_public_key"
 ```
 
@@ -150,3 +150,5 @@ Please ensure your code adheres to the project's coding standards and includes a
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 ```
+
+This `README.md` should now be more comprehensive, consistent, and easier to navigate, while also encouraging better security practices and community contributions.
