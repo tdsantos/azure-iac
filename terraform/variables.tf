@@ -79,3 +79,8 @@ variable "vm_linux_password" {
   type        = string
   sensitive   = true
 }
+
+variable "vm_linux_ssh_key_path" {
+  description = "The path to the SSH public key for the Linux virtual machine"
+  type        = string
+}

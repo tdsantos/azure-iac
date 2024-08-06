@@ -39,10 +39,9 @@ variable "vm_linux_username" {
   type        = string
 }
 
-variable "vm_linux_password" {
-  description = "The admin password for the Linux virtual machine"
+variable "vm_linux_ssh_key_path" {
+  description = "The path to the SSH public key for the Linux virtual machine"
   type        = string
-  sensitive   = true
 }
 
 variable "tags" {
