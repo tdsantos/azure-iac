@@ -1,7 +1,3 @@
-# Olimpíadas Azure TFTEC 2024
-
-Repositório para armazenar o projeto das Olimpíadas TFTEC 2024
-
 ```markdown
 # Terraform Azure Infrastructure Project
 
@@ -13,9 +9,22 @@ Repositório para armazenar o projeto das Olimpíadas TFTEC 2024
 
 ## Overview
 
-Este projeto utiliza o Terraform para gerenciar e provisionar a infraestrutura no Azure. Ele inclui a configuração de recursos como grupos de recursos, redes virtuais, sub-redes, interfaces de rede e máquinas virtuais.
+This project uses Terraform to manage and provision infrastructure on Azure. It includes the configuration of resources such as resource groups, virtual networks, subnets, network interfaces, and virtual machines.
 
-## Estrutura do Projeto
+## Índice
+
+- [Overview](#overview)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Setup](#setup)
+- [Provisioned Resources](#provisioned-resources)
+- [Outputs](#outputs)
+- [Cleanup](#cleanup)
+- [Security Best Practices](#security-best-practices)
+- [Contribution](#contribution)
+- [License](#license)
+
+## Project Structure
 
 ```plaintext
 terraform/
@@ -35,29 +44,29 @@ terraform/
 └── README.md
 ```
 
-## Pré-requisitos
+## Prerequisites
 
 - Terraform v1.0+
-- Azure CLI
-- Conta no Azure
+- Azure CLI v2.30.0+
+- An Azure account
 
-## Configuração
+## Setup
 
-### 1. Configurar Azure CLI
+### 1. Configure Azure CLI
 
 ```sh
 az login
 ```
 
-### 2. Inicializar o Terraform
+### 2. Initialize Terraform
 
 ```sh
 terraform init
 ```
 
-### 3. Configurar Variáveis
+### 3. Configure Variables
 
-Edite o arquivo `terraform.tfvars` com os valores apropriados:
+Edit the `terraform.tfvars` file with appropriate values:
 
 ```hcl
 resource_group_name = "rg-olimpiadas"
@@ -74,20 +83,22 @@ tags = {
   Project     = "Olimpiadas"
 }
 vm_windows_name     = "vm-windows"
-vm_windows_username = "user_name"
+vm_windows_username = "johnsnow"
 vm_windows_password = "your_password"
 vm_linux_name       = "vm-linux"
-vm_linux_username   = "user_name"
+vm_linux_username   = "johnsnow"
 vm_linux_ssh_key    = "your_ssh_public_key"
 ```
 
-### 4. Aplicar o Terraform
+### 4. Apply Terraform
 
 ```sh
 terraform apply
 ```
 
-## Recursos Provisionados
+## Provisioned Resources
+
+![Azure Resources](https://docs.microsoft.com/en-us/azure/architecture/icons/PNG/Resources.png)
 
 - **Resource Group:** `rg-olimpiadas`
 - **Virtual Network:** `vnet-olimpiadas`
@@ -101,27 +112,41 @@ terraform apply
 
 ## Outputs
 
-Os principais outputs deste projeto incluem:
+Key outputs of this project include:
 
-- ID do Grupo de Recursos
-- Nome da Rede Virtual
-- IDs das Subnets
-- Endereços IP Públicos das VMs
+- Resource Group ID
+- Virtual Network Name
+- Subnet IDs
+- Public IP Addresses of VMs
 
-## Limpeza
+## Cleanup
 
-Para destruir a infraestrutura provisionada, execute:
+To destroy the provisioned infrastructure, run:
 
 ```sh
 terraform destroy
 ```
 
-## Contribuição
+## Security Best Practices
 
-Sinta-se à vontade para contribuir com este projeto enviando pull requests, reportando issues ou sugerindo melhorias.
+- **Use Azure Key Vault:** Store sensitive information such as passwords and SSH keys in Azure Key Vault to enhance security.
+- **Environment Variables:** Avoid hardcoding sensitive information in the codebase. Use environment variables instead.
+- **Access Controls:** Implement strict access controls and role-based access (RBAC) to limit access to sensitive resources.
 
-## Licença
+## Contribution
 
-Este projeto é licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+We welcome contributions! Please follow these guidelines:
 
----
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add new feature'`).
+5. Push to the branch (`git push origin feature-branch`).
+6. Open a pull request.
+
+Please ensure your code adheres to the project's coding standards and includes appropriate tests.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+```
