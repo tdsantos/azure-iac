@@ -1,69 +1,125 @@
+# Olimpíadas Azure TFTEC 2024
 
-# Olimpiadas Azure 2024 - TFTEC
+Repositório para armazenar o projeto das Olimpíadas TFTEC 2024
 
-## Apresentação
+```markdown
+# Terraform Azure Infrastructure Project
 
-Olá! Meu nome é Thiago dos Santos. Este repositório foi criado para acompanhar as Olimpíadas Azure 2024 da TFTEC. Neste projeto, explorarei e aprenderemos as principais tecnologias do Microsoft Azure, bem como aprofundarei meus conhecimentos em Terraform, Ansible e Shell.
+![Terraform](https://img.shields.io/badge/Terraform-v1.0+-623CE4?style=for-the-badge&logo=terraform)
+![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoft-azure)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-## Conteúdo
+## Overview
 
-Neste projeto, vamos aprender e implementar as seguintes tecnologias e serviços do Azure:
-
-- **Virtual Machines**: Criação, configuração e gerenciamento de máquinas virtuais.
-- **Active Directory**: Configuração e gerenciamento do Azure Active Directory.
-- **.NET**: Desenvolvimento e implantação de aplicativos .NET no Azure.
-- **SQL**: Configuração e gerenciamento de bancos de dados SQL no Azure.
-- **VPN**: Configuração de redes virtuais e VPNs.
-- **Firewalls**: Implementação de firewalls para proteger recursos na nuvem.
-- **Azure DevOps**: Integração e entrega contínua com Azure DevOps.
-- **API Management**: Gerenciamento de APIs com Azure API Management.
-- **KeyVault**: Gerenciamento de chaves, segredos e certificados com Azure Key Vault.
-- **Storage Accounts**: Configuração e uso de contas de armazenamento no Azure.
-- **E muito mais!**
-
-## Objetivos
-
-Este projeto tem como objetivo proporcionar habilidades práticas para gerenciar, proteger e otimizar recursos na nuvem. Além disso, é uma oportunidade de:
-
-- Aprofundar conhecimentos em **Terraform**: Automatização da infraestrutura como código.
-- Aprofundar conhecimentos em **Ansible**: Automação da configuração e gerenciamento de sistemas.
-- Aprofundar conhecimentos em **Shell scripting**: Criação de scripts para automação de tarefas no ambiente de linha de comando.
+Este projeto utiliza o Terraform para gerenciar e provisionar a infraestrutura no Azure. Ele inclui a configuração de recursos como grupos de recursos, redes virtuais, sub-redes, interfaces de rede e máquinas virtuais.
 
 ## Estrutura do Projeto
 
-A estrutura do projeto é organizada da seguinte maneira:
-
-```
-azure-terraform/
-├── modules/
-│   ├── network/
-│   ├── compute/
-│   └── storage/
-├── ansible/
-│   ├── inventory/
-│   ├── playbooks/
-│   ├── roles/
-│   │   ├── common/
-│   │   ├── webserver/
-│   │   └── database/
-├── env/
-│   ├── dev/
-│   ├── staging/
-│   └── prod/
-├── scripts/
-│   └── setup_azure_credentials.sh
+```plaintext
+terraform/
 ├── main.tf
+├── variables.tf
 ├── outputs.tf
 ├── providers.tf
-└── variables.tf
+├── modules/
+│   ├── network/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   ├── vm/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+└── README.md
 ```
 
-## Como Contribuir
+## Pré-requisitos
 
-Sinta-se à vontade para explorar, clonar o repositório e contribuir com sugestões, melhorias ou correções.
+- Terraform v1.0+
+- Azure CLI
+- Conta no Azure
 
-## Contato
+## Configuração
 
-Para quaisquer dúvidas ou sugestões, entre em contato comigo através do tdsantos.cloud@gmail.com ou conecte-se comigo no [LinkedIn](https://www.linkedin.com/in/tdsantos1981/).
+### 1. Configurar Azure CLI
 
-Aproveite essa jornada para avançar no seu conhecimento de Azure e outras tecnologias de infraestrutura como código!
+```sh
+az login
+```
+
+### 2. Inicializar o Terraform
+
+```sh
+terraform init
+```
+
+### 3. Configurar Variáveis
+
+Edite o arquivo `terraform.tfvars` com os valores apropriados:
+
+```hcl
+resource_group_name = "rg-olimpiadas"
+location            = "eastus"
+vnet_name           = "vnet-olimpiadas"
+address_space       = ["10.0.0.0/16"]
+subnet01_name       = "sub-olimpiadas01"
+subnet01_prefix     = "10.0.1.0/24"
+subnet02_name       = "sub-olimpiadas02"
+subnet02_prefix     = "10.0.2.0/24"
+nsg_name            = "nsg-olimpiadas"
+tags = {
+  Environment = "Test"
+  Project     = "Olimpiadas"
+}
+vm_windows_name     = "vm-windows"
+vm_windows_username = "user_name"
+vm_windows_password = "your_password"
+vm_linux_name       = "vm-linux"
+vm_linux_username   = "user_name"
+vm_linux_ssh_key    = "your_ssh_public_key"
+```
+
+### 4. Aplicar o Terraform
+
+```sh
+terraform apply
+```
+
+## Recursos Provisionados
+
+- **Resource Group:** `rg-olimpiadas`
+- **Virtual Network:** `vnet-olimpiadas`
+- **Subnets:**
+  - `sub-olimpiadas01`
+  - `sub-olimpiadas02`
+- **Network Security Group:** `nsg-olimpiadas`
+- **Virtual Machines:**
+  - Windows VM: `vm-windows`
+  - Linux VM: `vm-linux`
+
+## Outputs
+
+Os principais outputs deste projeto incluem:
+
+- ID do Grupo de Recursos
+- Nome da Rede Virtual
+- IDs das Subnets
+- Endereços IP Públicos das VMs
+
+## Limpeza
+
+Para destruir a infraestrutura provisionada, execute:
+
+```sh
+terraform destroy
+```
+
+## Contribuição
+
+Sinta-se à vontade para contribuir com este projeto enviando pull requests, reportando issues ou sugerindo melhorias.
+
+## Licença
+
+Este projeto é licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
